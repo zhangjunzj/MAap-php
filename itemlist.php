@@ -23,6 +23,7 @@
                 $temp['id'] = $value['i_id'];
                 $temp['title'] = $value['i_title'];
                 $temp['introduce'] = $value['i_introduce'];
+                $temp['uid'] = $value['uid'];
                 $tempArray[] = $temp;
             }
             $result['code'] = 1;

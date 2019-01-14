@@ -19,16 +19,29 @@
         echo json_encode($result);
         return;
     }
+
+    function str_rand($length = 32, $char = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+        if(!is_int($length) || $length < 0) {
+           return false;
+       }
+        $string = 'ID';
+       for($i = $length; $i > 0; $i--) {
+           $string .= $char[mt_rand(0, strlen($char) - 1)];
+       }
+        return $string;
+   }
     
     switch ($_GET['action']) {
         case 'add':
             if ($_POST) {
                 $temObj['i_title'] = $_POST['title'];
                 $temObj['i_introduce'] = $_POST['introduce'];
+                $temObj['uid'] = str_rand();
                 $addedItemObj = $itemListModel->add($temObj);
                 if ($addedItemObj > 0) {
                     $result['code'] = 1;
                     $result['id'] = json_encode($addedItemObj);
+                    $result['uid'] = $temObj['uid'];
                     $result['message'] = '添加成功';
                 } else {
                     $result['code'] = 0;
@@ -59,7 +72,7 @@
             
             break;
         case 'del': 
-            $itemImgArr = $imageModel->where("item_id={$_POST['id']}")->select();
+            $itemImgArr = $imageModel->where("item_id='{$_POST['uid']}'")->select();
             foreach($itemImgArr as $imgVal) {
                $imageModel->delete($imgVal['id']);
             };
@@ -72,7 +85,7 @@
             }
             break;
         case 'queryitemimg':
-            $imgarr = $imageModel->where("item_id={$_POST['itemId']}")->select();
+            $imgarr = $imageModel->where("item_id='{$_POST['itemId']}'")->select();
             if ($imgarr) {
                 foreach($imgarr as $imgval) {
                     $imgTmpObj['name'] = $imgval['id'];
