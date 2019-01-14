@@ -34,7 +34,7 @@
             break;
         case 'queryitem':
             $item = $itemListModel->find($_POST['id']);
-            $itemimg = $imageModel->where("item_id={$_POST['id']}")->select();
+            $itemimg = $imageModel->where("item_id='{$_POST['uid']}'")->select();
             if ($item) {
                 foreach($itemimg as $imgval) {
                     $imgTmpObj['url'] = 'images/'.$imgval['path'].$imgval['url'];
